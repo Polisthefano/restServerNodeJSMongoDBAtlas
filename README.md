@@ -1,3 +1,2 @@
-# Cascaron Api rest En Node
+# Curso de Node Rest Server con MongoDB Atlas
 
-Recorda que debes hacer este comando al clonarlo para que funcione ```npm i```# restServerNodeJSMongoDBAtlas
