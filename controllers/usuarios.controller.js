@@ -26,7 +26,7 @@ const usuariosPost = async (req, res = response) => {
     await usuario.save() //esto guarda el usuario creado en la collecion que se creo por medio de new Usuario()
     res.status(200).json({
      msg:'ok',
-    nombre,correo,rol,id:usuario.id
+     usuario
     }
     )
 }
