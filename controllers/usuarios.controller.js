@@ -33,7 +33,7 @@ const usuariosPost = async (req, res = response) => {
 
 const usuariosPut = async (req, res = response) => {
   const id = req.params.id;
-  const { password, google, correo, ...resto } = req.body;
+  const { _id, password, google, correo, ...resto } = req.body;
   //validar id no existente, con express validator, correo actualizar role actualizar, role valido controlar
   if (password) {
     const hashPassword = bcrypt.genSaltSync();
@@ -41,7 +41,7 @@ const usuariosPut = async (req, res = response) => {
   }
   const usuario = await Usuario.findByIdAndUpdate(id, resto);
   res.status(200).json({
-    msg: "Usuario actulizado correctamente",
+    msg: "Usuario actualizado correctamente",
     usuario,
   });
 };
