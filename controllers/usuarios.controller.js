@@ -3,15 +3,19 @@ const { response, request } = require("express"); //al importar esto y poner res
 const bcrypt = require("bcryptjs");
 const Usuario = require("../models/usuario.model");
 
-const usuariosGet = (req = request, res = response) => {
-  const { nombre = "Sin nombre", apikey } = req.query; //aca vienen los query params, son los que mandamos en la url con ? el primero y despuse & para concatenar
+const usuariosGet = async (req = request, res = response) => {
+  // const { nombre = "Sin nombre", apikey } = req.query; //aca vienen los query params, son los que mandamos en la url con ? el primero y despuse & para concatenar
+  const { limit = 5, since = 0 } = req.query;
+  const usuarios = await Usuario.find()
+    .skip(Number(since)) //empieza desde el numero de registro enviados
+    .limit(Number(limit)); //limite es el limite de registros que retorna
   res.status(200).json({
-    //status para retornar el codigo, el 200 si no mandas nada es el default
-    msg: "get API",
-    nombre,
-    apikey,
+    msg: "Usuarios obtenidos correctamente",
+    usuarios,
+    totalUsuarios: usuarios.length,
   });
 };
+
 const usuariosPost = async (req, res = response) => {
   const { nombre, correo, password, rol } = req.body;
   const usuario = new Usuario({ nombre, correo, password, rol }); //este usuario es un objeto creado por mongoose pero es un objeto y podemos acceder a sus propiedades sin problema
