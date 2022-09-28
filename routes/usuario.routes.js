@@ -48,6 +48,15 @@ router.post(
   usuariosPost
 ); //en el medio entre el path y el controllador van el array de middleware o funciones que se ejecutan antes del controlador
 
-router.delete("", usuariosDelete);
+router.delete(
+  "/:id",
+  [
+    check("id", "Este id no es un id valido de mongo").isMongoId(),
+    validarCampos,
+    check("id").custom(IdDBValidador),
+    validarCampos,
+  ],
+  usuariosDelete
+);
 router.patch("", usuariosPatch);
 module.exports = router;
