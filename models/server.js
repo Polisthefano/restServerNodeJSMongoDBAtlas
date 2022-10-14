@@ -7,6 +7,7 @@ class Server { //server orientado a objetos
         this.app = express()
         this.port = process.env.PORT
         this.usuariosRoutePath = '/api/usuarios'
+        //
         //conexion a la base de datos
           this.conectarDB()  
         //middlewares
