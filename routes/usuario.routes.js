@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { check} = require("express-validator");
+const { check } = require("express-validator");
 const {
   usuariosGet,
   usuariosPut,
@@ -14,6 +14,7 @@ const {
   emailDBValidador,
   IdDBValidador,
 } = require("../database/db-validators"); //callback de validacion personalizada del rol
+const { validarJWT } = require("../middlewares/validart-jwt");
 
 const router = Router();
 router.get("", usuariosGet);
@@ -51,6 +52,7 @@ router.post(
 router.delete(
   "/:id",
   [
+    validarJWT,
     check("id", "Este id no es un id valido de mongo").isMongoId(),
     validarCampos,
     check("id").custom(IdDBValidador),
