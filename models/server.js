@@ -7,6 +7,7 @@ class Server { //server orientado a objetos
         this.app = express()
         this.port = process.env.PORT
         this.usuariosRoutePath = '/api/usuarios'
+        this.authPath = '/api/auth'
         //
         //conexion a la base de datos
           this.conectarDB()  
@@ -32,6 +33,7 @@ class Server { //server orientado a objetos
     routes() {
         this.app.use(this.usuariosRoutePath, require('../routes/usuario.routes')) //middleware de tipo route donde va la ruta y la 
             //llamada al archivo de rutas
+        this.app.use(this.authPath, require('../routes/auth.routes'))
     }
     listen() {
         this.app.listen(this.port)
