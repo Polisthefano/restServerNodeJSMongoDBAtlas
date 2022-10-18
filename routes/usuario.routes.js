@@ -7,15 +7,18 @@ const {
   usuariosDelete,
   usuariosPatch,
 } = require("../controllers/usuarios.controller");
-const { loguearRequest } = require("../middlewares/utils");
-const validarCampos = require("../middlewares/validar-campos");
 const {
   roleDBValidator,
   emailDBValidador,
   IdDBValidador,
 } = require("../database/db-validators"); //callback de validacion personalizada del rol
-const { validarJWT } = require("../middlewares/validart-jwt");
-
+const {
+  loguearRequest,
+  validarCampos,
+  validarJWT,
+  esAdminRol,
+  tieneRole,
+} = require("../middlewares");
 const router = Router();
 router.get("", usuariosGet);
 
@@ -53,6 +56,8 @@ router.delete(
   "/:id",
   [
     validarJWT,
+    // esAdminRol, //fuerza a que sea admin
+    tieneRole("ADMIN_ROLE", "VENTAS_ROLE"), //chequea que se algun role de esos
     check("id", "Este id no es un id valido de mongo").isMongoId(),
     validarCampos,
     check("id").custom(IdDBValidador),
