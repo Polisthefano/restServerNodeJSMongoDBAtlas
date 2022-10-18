@@ -61,7 +61,8 @@ const usuariosDelete = async (req, res = response) => {
   const usuario = await softDeleteUsuario(id);
   res.status(200).json({
     msg: "Usuario eliminado correctamente",
-    usuario,
+    usuarioEliminado: usuario,
+    usuarioAutenticado: req.usuario,
   });
 };
 
