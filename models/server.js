@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const { dbConnection } = require("../database/config");
+const { swaggerDocs } = require("../swager");
 class Server {
   //server orientado a objetos
 
@@ -37,6 +38,7 @@ class Server {
   }
   listen() {
     this.app.listen(this.port);
+    swaggerDocs(this.app, this.port);
   }
 }
 module.exports = Server;
