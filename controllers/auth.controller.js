@@ -1,7 +1,9 @@
 const { response } = require("express");
 const Usuario = require("../models/usuario.model");
 const bcrypt = require("bcryptjs");
-const { generarJWT } = require("../utils/generarJWT");
+const { generarJWT } = require("../helpers/generarJWT");
+const { googleVerify } = require("../helpers/google-verify");
+
 const login = async (req, res = response) => {
   const { correo, password } = req.body;
   try {
@@ -43,4 +45,45 @@ const login = async (req, res = response) => {
   }
 };
 
-module.exports = { login };
+const googleSingIn = async (req, res) => {
+  const { id_token } = req.body;
+  try {
+    const {
+      name: nombre, //de esta forma al desectructurar le cambiamos el nombre a como viene el atributo del objeto
+      picture: img,
+      email: correo,
+    } = await googleVerify(id_token);
+
+    //validar si el correo del usuario no esta creado
+    let usuario = await Usuario.findOne({ correo });
+
+    if (!usuario) {
+      const dataUsuarioToInsert = {
+        nombre,
+        correo,
+        img,
+        password: ":(",
+        google: true,
+      };
+      usuario = new Usuario(dataUsuarioToInsert);
+      await usuario.save();
+    } else {
+      //se podria hacer un update con la data de google, sino se devuelve el creado
+    }
+
+    //si el usuario fue eliminado con ese email
+    if (!usuario.estado) {
+      return res
+        .status(401)
+        .json("Hable con el administrador - usuario eliminado");
+    }
+
+    const token = await generarJWT({ uid: usuario.id });
+
+    res.json({ usuario, token });
+  } catch (err) {
+    return res.status(400).json("Token google no es valido");
+  }
+};
+
+module.exports = { login, googleSingIn };

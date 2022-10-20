@@ -5,7 +5,12 @@ const UsuarioSchema = Schema({
   correo: { type: String, required: true, unique: true }, //unique bloquea que no haya correos repetidos
   password: { type: String, required: true },
   img: { type: String },
-  rol: { type: String, required: true }, //enum es que solo esos dos tipos son permitidos en la DB
+  rol: {
+    type: String,
+    required: true,
+    default: "USER_ROLE",
+    enum: ["ADMIN_ROLE", "USER_ROLE", "SUPER_ROLE"],
+  }, //enum es que solo esos dos tipos son permitidos en la DB
   estado: { type: Boolean, default: true },
   google: {
     type: Boolean,
