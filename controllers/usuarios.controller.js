@@ -1,7 +1,7 @@
 const { response, request } = require("express"); //al importar esto y poner res=response y req=request hace que vscode
 
 const bcrypt = require("bcryptjs");
-const Usuario = require("../models/usuario.model");
+const { Usuario } = require("../models/index");
 
 const usuariosGet = async (req = request, res = response) => {
   // const { nombre = "Sin nombre", apikey } = req.query; //aca vienen los query params, son los que mandamos en la url con ? el primero y despuse & para concatenar
