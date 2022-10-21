@@ -26,6 +26,7 @@
       data-shape="rectangular"
       data-logo_alignment="left"
     ></div>
+    <button id="singOutGoogle">SingOut</button>
   </body>
   <script>
     function handleCredentialResponse(response) {
@@ -37,22 +38,24 @@
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id_token: response.credential }), //al enviar en los headers el type el body siempre debe ir con JSON.stringify
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          //al parecer fetch en la primer response devuelve una promise por eso hay que concatenarla
+          localStorage.setItem("emailUser", res.usuario.correo);
+        })
+        .catch((err) => {
+          console.error("Error al autenticar con google ", err);
+        });
+    }
+    const button = document.getElementById("singOutGoogle");
+    button.onclick = () => {
+      console.log(google.accounts.id);
+      google.accounts.id.revoke(localStorage.getItem("emailUser"), (done) => {
+        //de esta manera google borra el token de sus datos y nosotros del local donde teniamos el email de logueado y recargamos la pagina para eliminar cualquier cache
+        localStorage.clear();
+        location.reload();
       });
-    }
-
-    function decodeJWT(token) {
-      var base64Url = token.split(".")[1];
-      var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-      var jsonPayload = decodeURIComponent(
-        window
-          .atob(base64)
-          .split("")
-          .map(function (c) {
-            return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-          })
-          .join("")
-      );
-      return JSON.parse(jsonPayload);
-    }
+    };
   </script>
 </html>
