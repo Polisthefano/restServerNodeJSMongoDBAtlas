@@ -10,13 +10,12 @@ const {
 const {
   roleDBValidator,
   emailDBValidador,
-  IdDBValidador,
+  IdDBValidadorUsuario,
 } = require("../database/db-validators"); //callback de validacion personalizada del rol
 const {
   loguearRequest,
   validarCampos,
   validarJWT,
-  esAdminRol,
   tieneRole,
 } = require("../middlewares");
 const router = Router();
@@ -26,7 +25,7 @@ router.put(
   "/:id",
   [
     check("id", "Este id no es un id valido de mongo").isMongoId(),
-    check("id").custom(IdDBValidador),
+    check("id").custom(IdDBValidadorUsuario),
     check("rol").custom(roleDBValidator),
     validarCampos,
   ],
@@ -59,8 +58,7 @@ router.delete(
     // esAdminRol, //fuerza a que sea admin
     tieneRole("ADMIN_ROLE", "VENTAS_ROLE"), //chequea que se algun role de esos
     check("id", "Este id no es un id valido de mongo").isMongoId(),
-    validarCampos,
-    check("id").custom(IdDBValidador),
+    check("id").custom(IdDBValidadorUsuario),
     validarCampos,
   ],
   usuariosDelete
