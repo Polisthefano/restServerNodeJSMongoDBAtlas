@@ -13,7 +13,9 @@ class Server {
       usuarios: this.urlBase + "usuarios",
       auth: this.urlBase + "auth",
       categorias: this.urlBase + "categorias",
+      productos: this.urlBase + "productos",
     };
+    debugger;
     //conexion a la base de datos
     this.conectarDB();
     //middlewares
@@ -40,6 +42,7 @@ class Server {
     //llamada al archivo de rutas
     this.app.use(this.paths.auth, require("../routes/auth.routes"));
     this.app.use(this.paths.categorias, require("../routes/categorias.routes"));
+    this.app.use(this.paths.productos, require("../routes/productos.routes"));
   }
   listen() {
     this.app.listen(this.port);

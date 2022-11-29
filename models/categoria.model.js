@@ -11,7 +11,7 @@ const CategoriaSchema = Schema({
 
 CategoriaSchema.methods.toJSON = function () {
   //esto es que cuando se mande a ejecutar el metodo del Schema toJson,
-  //va a ejecutar eso, aqui en este modelo y de esta manera podemos reemplazar el contenido de cualquier funcion de mongoose, find ny id o la que sea
+  //va a ejecutar eso, aqui en este modelo y de esta manera podemos reemplazar el contenido de cualquier funcion de mongoose, find by id o la que sea
   const { __v, ...categoria } = this.toObject();
   return categoria;
 }; //el metodo toJSON se ejecuta cuando nos devuelve una coleccion mongoose
