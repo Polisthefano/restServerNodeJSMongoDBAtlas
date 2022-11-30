@@ -42,12 +42,18 @@ const existeProducto = async (_id = "") => {
 const exists = async (_id = "", collection, message) => {
   const error = new Error(message);
   try {
-    const existeID =
-      collection == "USUARIO"
-        ? await Usuario.findOne({ _id })
-        : collection === "PRODUCTO"
-        ? await Producto.findOne({ _id })
-        : await Categoria.findOne({ _id });
+    let existeID = true;
+    switch (collection) {
+      case "PRODUCTO":
+        existeID = await Producto.findOne({ _id });
+        break;
+      case "USUARIO":
+        existeID = await Usuario.findOne({ _id });
+        break;
+      case "CATEGORIA":
+        existeID = await Categoria.findOne({ _id });
+        break;
+    }
     if (!existeID) {
       throw error;
     }
