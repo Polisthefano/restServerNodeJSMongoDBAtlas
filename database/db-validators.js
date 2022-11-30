@@ -1,4 +1,4 @@
-const { Role, Usuario, Categoria } = require("../models/index");
+const { Role, Usuario, Categoria, Producto } = require("../models/index");
 const roleDBValidator = async (rol) => {
   //los check custom permite hacer funciones personalizadas, usan un callback en este caso busco en los roles que estan en db
   if (rol?.length >= 0) {
@@ -16,23 +16,37 @@ const emailDBValidador = async (email = "") => {
   }
 };
 const IdDBValidadorUsuario = async (_id = "") => {
-  return exists(_id, "USUARIO");
+  return exists(
+    _id,
+    "USUARIO",
+    "Ese ID " + _id + " no pertenece a un usuario existente"
+  );
 };
 
 const existeCategoria = async (_id = "") => {
-  return exists(_id, "CATEGORIA");
+  return exists(
+    _id,
+    "CATEGORIA",
+    "Ese ID " + _id + " no pertenece a una categoria existente"
+  );
 };
 
-const exists = async (_id = "", collection) => {
-  const msg =
-    collection === "USUARIO"
-      ? "Ese ID " + _id + " no pertenece a un usuario existente"
-      : "Ese ID " + _id + " no pertenece a una categoria existente";
-  const error = new Error(msg);
+const existeProducto = async (_id = "") => {
+  return exists(
+    _id,
+    "PRODUCTO",
+    "Ese ID " + _id + " no pertenece a un producto existente"
+  );
+};
+
+const exists = async (_id = "", collection, message) => {
+  const error = new Error(message);
   try {
     const existeID =
       collection == "USUARIO"
         ? await Usuario.findOne({ _id })
+        : collection === "PRODUCTO"
+        ? await Producto.findOne({ _id })
         : await Categoria.findOne({ _id });
     if (!existeID) {
       throw error;
@@ -46,4 +60,5 @@ module.exports = {
   emailDBValidador,
   IdDBValidadorUsuario,
   existeCategoria,
+  existeProducto,
 };

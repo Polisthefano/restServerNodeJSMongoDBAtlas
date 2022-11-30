@@ -15,7 +15,6 @@ class Server {
       categorias: this.urlBase + "categorias",
       productos: this.urlBase + "productos",
     };
-    debugger;
     //conexion a la base de datos
     this.conectarDB();
     //middlewares

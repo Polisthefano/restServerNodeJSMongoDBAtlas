@@ -3,8 +3,12 @@ const { check } = require("express-validator");
 const {
   crearProducto,
   obtenerProductos,
+  obtenerProducto,
 } = require("../controllers/productos.controller");
-const { existeCategoria } = require("../database/db-validators");
+const {
+  existeCategoria,
+  existeProducto,
+} = require("../database/db-validators");
 const {
   loguearRequest,
   validarJWT,
@@ -22,10 +26,10 @@ router.get(
   [
     loguearRequest,
     check("id", "Este id no es un id valido de mongo").isMongoId(),
-    check("id").custom(existeCategoria),
+    check("id").custom(existeProducto),
     validarCampos,
   ],
-  () => {}
+  obtenerProducto
 );
 
 //Crear un producto - private
@@ -34,7 +38,6 @@ router.post(
   [
     validarJWT,
     check("nombre", "El nombre es obligatorio").not().isEmpty(),
-    check("precio").custom(numberNotNegativeIfExist),
     check("categoria", "Este id no es un id valido de mongo").isMongoId(),
     check("categoria").custom(existeCategoria),
     check("precio", "El precio debe ser mayor a 0")
