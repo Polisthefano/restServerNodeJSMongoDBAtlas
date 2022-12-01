@@ -33,4 +33,19 @@ const crearProducto = async (req, res = response) => {
   await newProducto.save();
   res.status(200).json(newProducto);
 };
-module.exports = { crearProducto, obtenerProductos, obtenerProducto };
+
+const actualizarProducto = async (req, res = response) => {
+  const { estado, ...body } = req.body;
+  body.usuario = req.usuario._id;
+  const productoUpdate = await Producto.findByIdAndUpdate(req.params.id, body)
+    .populate("usuario", ["nombre", "id"])
+    .populate("categoria", ["nombre", "id"]);
+  res.status(200).json(productoUpdate);
+};
+
+module.exports = {
+  crearProducto,
+  obtenerProductos,
+  obtenerProducto,
+  actualizarProducto,
+};

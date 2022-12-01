@@ -39,7 +39,7 @@ const actualizarCategoria = async (req, res = response) => {
   }
   const categoriaUpdate = await Categoria.findByIdAndUpdate(req.params.id, {
     nombre,
-    id: req.params.id,
+    usuario: req.usuario._id,
   }).populate("usuario", ["nombre", "id"]);
   res.status(200).json(categoriaUpdate);
 };

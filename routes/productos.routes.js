@@ -4,6 +4,7 @@ const {
   crearProducto,
   obtenerProductos,
   obtenerProducto,
+  actualizarProducto,
 } = require("../controllers/productos.controller");
 const {
   existeCategoria,
@@ -58,11 +59,23 @@ router.put(
   [
     validarJWT,
     check("id", "Este id no es un id valido de mongo").isMongoId(),
-    check("id").custom(existeCategoria),
-    check("nombre", "El nombre es obligatorio").not().isEmpty(),
+    check("id").custom(existeProducto),
+    check("categoria", "Este id no es un id valido de mongo")
+      .optional()
+      .isMongoId(),
+    check("categoria").optional().custom(existeCategoria),
+    check("precio", "El precio debe ser mayor a 0")
+      .optional()
+      .isInt({ min: 0 }), //optional permite que si viene el valor, cumpla una condicion
+    check("descripcion", "La descripcion debe tener al menos un caracter")
+      .optional()
+      .isLength({ min: 1, max: 100 }),
+    check("disponible", "Este campo debe ser un booleano")
+      .optional()
+      .isBoolean(),
     validarCampos,
   ],
-  () => {}
+  actualizarProducto
 );
 
 //Eliminar un producto - Admin
