@@ -6,7 +6,7 @@ const {
   usuariosPost,
   usuariosDelete,
   usuariosPatch,
-} = require("../controllers/usuarios.controller");
+} = require("../controllers");
 const {
   roleDBValidator,
   emailDBValidador,

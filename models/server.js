@@ -14,6 +14,7 @@ class Server {
       auth: this.urlBase + "auth",
       categorias: this.urlBase + "categorias",
       productos: this.urlBase + "productos",
+      buscar: this.urlBase + "buscar",
     };
     //conexion a la base de datos
     this.conectarDB();
@@ -42,6 +43,7 @@ class Server {
     this.app.use(this.paths.auth, require("../routes/auth.routes"));
     this.app.use(this.paths.categorias, require("../routes/categorias.routes"));
     this.app.use(this.paths.productos, require("../routes/productos.routes"));
+    this.app.use(this.paths.buscar, require("../routes/buscar.routes"));
   }
   listen() {
     this.app.listen(this.port);

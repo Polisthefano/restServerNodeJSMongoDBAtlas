@@ -5,7 +5,8 @@ const {
   obtenerProductos,
   obtenerProducto,
   actualizarProducto,
-} = require("../controllers/productos.controller");
+  eliminarProducto,
+} = require("../controllers/");
 const {
   existeCategoria,
   existeProducto,
@@ -84,10 +85,10 @@ router.delete(
   [
     validarJWT,
     check("id", "Este id no es un id valido de mongo").isMongoId(),
-    check("id").custom(existeCategoria),
+    check("id").custom(existeProducto),
     tieneRole("ADMIN_ROLE"),
     validarCampos,
   ],
-  () => {}
+  eliminarProducto
 );
 module.exports = router;

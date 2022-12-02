@@ -23,7 +23,7 @@ const obtenerProducto = async (req, res) => {
 
 const crearProducto = async (req, res = response) => {
   const { estado, usuario, ...body } = req.body;
-
+  body.nombre = body.nombre.toUpperCase();
   const productoDB = await Producto.findOne({ nombre: body.nombre });
   if (productoDB) {
     return res.status(400).json("Ya existe el producto " + req.body.nombre);
@@ -36,8 +36,18 @@ const crearProducto = async (req, res = response) => {
 
 const actualizarProducto = async (req, res = response) => {
   const { estado, ...body } = req.body;
+  body.nombre = body.nombre.toUpperCase();
   body.usuario = req.usuario._id;
   const productoUpdate = await Producto.findByIdAndUpdate(req.params.id, body)
+    .populate("usuario", ["nombre", "id"])
+    .populate("categoria", ["nombre", "id"]);
+  res.status(200).json(productoUpdate);
+};
+
+const eliminarProducto = async (req, res = response) => {
+  const productoUpdate = await Producto.findByIdAndUpdate(req.params.id, {
+    estado: false,
+  })
     .populate("usuario", ["nombre", "id"])
     .populate("categoria", ["nombre", "id"]);
   res.status(200).json(productoUpdate);
@@ -48,4 +58,5 @@ module.exports = {
   obtenerProductos,
   obtenerProducto,
   actualizarProducto,
+  eliminarProducto,
 };

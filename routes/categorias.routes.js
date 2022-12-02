@@ -6,7 +6,7 @@ const {
   obtenerCategoria,
   actualizarCategoria,
   eliminarCategoria,
-} = require("../controllers/categorias.controller");
+} = require("../controllers/");
 const { existeCategoria } = require("../database/db-validators");
 const {
   loguearRequest,
