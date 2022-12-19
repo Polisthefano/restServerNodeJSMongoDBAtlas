@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const { dbConnection } = require("../database/config");
 const { swaggerDocs } = require("../swager");
+const fileUpload = require("express-fileupload");
 class Server {
   //server orientado a objetos
 
@@ -15,6 +16,7 @@ class Server {
       categorias: this.urlBase + "categorias",
       productos: this.urlBase + "productos",
       buscar: this.urlBase + "buscar",
+      uploads: this.urlBase + "uploads",
     };
     //conexion a la base de datos
     this.conectarDB();
@@ -29,12 +31,17 @@ class Server {
   }
   middlewares() {
     this.app.use(cors());
-
     //lectura y parseo del body
     this.app.use(express.json());
     //directorio publico
     this.app.use(express.static("public")); //use dice que vamos a usar un middleware
     //lo corre en la ruta / path vacio
+    this.app.use(
+      fileUpload({
+        useTempFiles: true,
+        tempFileDir: "/tmp/",
+      })
+    );
   }
 
   routes() {
@@ -44,6 +51,7 @@ class Server {
     this.app.use(this.paths.categorias, require("../routes/categorias.routes"));
     this.app.use(this.paths.productos, require("../routes/productos.routes"));
     this.app.use(this.paths.buscar, require("../routes/buscar.routes"));
+    this.app.use(this.paths.uploads, require("../routes/uploads.routes"));
   }
   listen() {
     this.app.listen(this.port);
