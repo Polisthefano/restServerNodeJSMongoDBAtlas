@@ -10,16 +10,18 @@ const uploadFile = (
     const { file } = files;
     const extension = file.name.split(".")[file.name.split(".").length - 1]; //the last position of array from file.name.split
 
-    if (!allowedExtensions.includes(extension)) {
+    if (allowedExtensions && !allowedExtensions.includes(extension)) {
       return reject(`Extension ${extension} is not allowed`);
     }
     const newName = uuidv4() + "." + extension; //onyle uuid in name
     const uploadDir = path.join(__dirname, "../uploads/", folderPath); // __dirname es donde estoy parado
     const uploadPath = path.join(uploadDir, newName);
 
-    if (!fs.existsSync(uploadDir, { recursive: true })) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
+    //crea la ruta si no existe
+    // if (!fs.existsSync(uploadDir, { recursive: true })) {
+    //   fs.mkdirSync(uploadDir, { recursive: true });
+    // }
+
     if (fs.existsSync(uploadPath, { recursive: true })) {
       return reject("File already exists");
     }

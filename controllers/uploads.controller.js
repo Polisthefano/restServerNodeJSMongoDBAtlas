@@ -5,7 +5,7 @@ const cargarArchivo = async (req, res = response) => {
     return;
   }
   try {
-    const uploadFilePath = await uploadFile(req.files, undefined, undefined);
+    const uploadFilePath = await uploadFile(req.files, null, "imgs");
     res.json(uploadFilePath);
   } catch (err) {
     res.status(400).json(err);

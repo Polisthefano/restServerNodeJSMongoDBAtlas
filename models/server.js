@@ -35,11 +35,11 @@ class Server {
     this.app.use(express.json());
     //directorio publico
     this.app.use(express.static("public")); //use dice que vamos a usar un middleware
-    //lo corre en la ruta / path vacio
     this.app.use(
       fileUpload({
         useTempFiles: true,
         tempFileDir: "/tmp/",
+        createParentPath: true, //crea la ruta si no existe a la hora de subir un archivo
       })
     );
   }
