@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path"); //para unir y normalizar paths
 const uploadFile = (
   files,
-  allowedExtensions = ["jpeg", "jpg", "zip", "txt", "png", "gif"], //if not send allowedExtensions this is the default value
+  allowedExtensions = ["jpg", "jpeg", "zip", "txt", "png", "gif"], //if not send allowedExtensions this is the default value
   folderPath = ""
 ) => {
   return new Promise((resolve, reject) => {

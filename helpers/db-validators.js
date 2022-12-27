@@ -61,10 +61,20 @@ const exists = async (_id = "", collection, message) => {
     throw error;
   }
 };
+
+const validateAllowedCollections = (collection = "", collections = []) => {
+  const include = collections.includes(collection);
+  if (!include) {
+    throw new Error(`Collection ${collection} is not allowed - ${collections}`);
+  }
+  return true;
+};
+
 module.exports = {
   roleDBValidator,
   emailDBValidador,
   IdDBValidadorUsuario,
   existeCategoria,
   existeProducto,
+  validateAllowedCollections,
 };

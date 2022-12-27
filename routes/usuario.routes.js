@@ -11,7 +11,7 @@ const {
   roleDBValidator,
   emailDBValidador,
   IdDBValidadorUsuario,
-} = require("../database/db-validators"); //callback de validacion personalizada del rol
+} = require("../helpers"); //callback de validacion personalizada del rol
 const {
   loguearRequest,
   validarCampos,

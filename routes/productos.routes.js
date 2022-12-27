@@ -7,10 +7,7 @@ const {
   actualizarProducto,
   eliminarProducto,
 } = require("../controllers/");
-const {
-  existeCategoria,
-  existeProducto,
-} = require("../database/db-validators");
+const { existeCategoria, existeProducto } = require("../helpers");
 const {
   loguearRequest,
   validarJWT,

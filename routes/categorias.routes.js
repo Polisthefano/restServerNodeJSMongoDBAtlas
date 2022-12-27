@@ -7,7 +7,7 @@ const {
   actualizarCategoria,
   eliminarCategoria,
 } = require("../controllers/");
-const { existeCategoria } = require("../database/db-validators");
+const { existeCategoria } = require("../helpers");
 const {
   loguearRequest,
   validarJWT,
