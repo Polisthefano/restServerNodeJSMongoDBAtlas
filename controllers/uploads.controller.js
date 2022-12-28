@@ -1,10 +1,6 @@
 const { uploadFile } = require("../helpers");
-const { Usuario, Productos } = require("../models");
+const { Usuario, Producto } = require("../models");
 const cargarArchivo = async (req, res = response) => {
-  if (!req.files || Object.keys(req.files).length === 0 || !req.files.file) {
-    res.status(400).json("There arent files in the request");
-    return;
-  }
   try {
     const uploadFilePath = await uploadFile(req.files, undefined, "imgs");
     res.json(uploadFilePath);
@@ -13,19 +9,19 @@ const cargarArchivo = async (req, res = response) => {
   }
 };
 
-const updateArchivo = async (req, res = response) => {
-  const { id, colleccion: collection } = req.params;
+const updateImagen = async (req, res = response) => {
+  const { id, coleccion: collection } = req.params;
   let model;
 
   switch (collection) {
     case "usuarios":
-      model = Usuario.findById(id);
+      model = await Usuario.findById(id);
       if (!model) {
         return res.status(400).json("Do no exists user with ID " + id);
       }
       break;
     case "productos":
-      model = Productos.findById(id);
+      model = await Producto.findById(id);
       if (!model) {
         return res.status(400).json("Do no exists products with ID " + id);
       }
@@ -33,6 +29,15 @@ const updateArchivo = async (req, res = response) => {
     default:
       return res.status(500).json("Collection not allowed");
   }
+
+  try {
+    const nombre = await uploadFile(req.files, undefined, collection);
+    model.img = nombre;
+    await model.save();
+    res.json(model);
+  } catch (err) {
+    res.status(400).json(err);
+  }
 };
 
-module.exports = { cargarArchivo, updateArchivo };
+module.exports = { cargarArchivo, updateImagen };
