@@ -1,5 +1,9 @@
 const { Router } = require("express");
-const { cargarArchivo, updateImagen } = require("../controllers");
+const {
+  cargarArchivo,
+  getFileFromCollecion,
+  updateFile,
+} = require("../controllers");
 const { check } = require("express-validator");
 const { loguearRequest, validarCampos } = require("../middlewares/index");
 const { validateAllowedCollections } = require("../helpers");
@@ -19,7 +23,20 @@ router.put(
     ),
     validarCampos,
   ],
-  updateImagen
+  updateFile
+);
+router.get(
+  "/:coleccion/:id",
+  [
+    loguearRequest,
+    validateFilesInRequest,
+    check("id", "id should be mongo id valid").isMongoId(),
+    check("coleccion").custom((c) =>
+      validateAllowedCollections(c, ["usuarios", "productos"])
+    ),
+    validarCampos,
+  ],
+  getFileFromCollecion
 );
 
 module.exports = router;
