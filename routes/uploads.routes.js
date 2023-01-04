@@ -25,11 +25,11 @@ router.put(
   ],
   updateFile
 );
+
 router.get(
   "/:coleccion/:id",
   [
     loguearRequest,
-    validateFilesInRequest,
     check("id", "id should be mongo id valid").isMongoId(),
     check("coleccion").custom((c) =>
       validateAllowedCollections(c, ["usuarios", "productos"])
