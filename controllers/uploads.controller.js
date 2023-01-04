@@ -5,6 +5,7 @@ const {
   getRecordByIdFromSomeCollection,
 } = require("../helpers/getRecordByCollection");
 const { response } = require("express");
+const e = require("express");
 const cargarArchivo = async (req, res = response) => {
   try {
     const uploadFilePath = await uploadFile(req.files, undefined, "imgs");
@@ -61,18 +62,19 @@ const getFileFromCollecion = async (req, res = response) => {
 
   //rebuild path and send image
   try {
+    let existsFile = false;
+    const noImgPath = path.join(__dirname, "../shared/assets", "no-image.jpg");
+    let imgPath = "";
     if (model.img) {
-      const imgPath = path.join(__dirname, "../uploads", collection, model.img);
+      imgPath = path.join(__dirname, "../uploads", collection, model.img);
       if (fs.existsSync(imgPath)) {
-        return res.status(200).sendFile(imgPath); //allow sendFiles via response. This allow in frontend send request to this endpoint and in src path into <img> put the result
+        existsFile = true;
       }
+    }
+    if (existsFile) {
+      return res.status(200).sendFile(imgPath); //allow sendFiles via response. This allow in frontend send request to this endpoint and in src path into <img> put the result
     } else {
-      const noImgPath = path.join(
-        __dirname,
-        "../shared/assets",
-        "no-image.jpg"
-      );
-      return res.status(200).sendFile(noImgPath);
+      return res.status(200).sendFile(noImgPath); //allow sendFiles via response. This allow in frontend send request to this endpoint and in src path into <img> put the result
     }
   } catch (err) {
     return res
