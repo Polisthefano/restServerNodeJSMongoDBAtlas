@@ -4,7 +4,8 @@ const UsuarioSchema = Schema({
   nombre: { type: String, required: true },
   correo: { type: String, required: true, unique: true }, //unique bloquea que no haya correos repetidos
   password: { type: String, required: true },
-  img: { type: String },
+  imgLocal: { type: String },
+  imgCloud: { type: String },
   rol: {
     type: String,
     required: true,

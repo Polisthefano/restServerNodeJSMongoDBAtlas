@@ -1,14 +1,19 @@
-const { uploadFile } = require("../helpers");
-const path = require("path");
-const fs = require("fs");
+const {
+  cleanPreviousFile,
+  uploadFileToLocalOrProduction,
+  saveFileToFS,
+} = require("../helpers");
 const {
   getRecordByIdFromSomeCollection,
 } = require("../helpers/getRecordByCollection");
+
+const path = require("path");
+const fs = require("fs");
 const { response } = require("express");
-const e = require("express");
+
 const cargarArchivo = async (req, res = response) => {
   try {
-    const uploadFilePath = await uploadFile(req.files, undefined, "imgs");
+    const uploadFilePath = await saveFileToFS(req.files, undefined, "imgs");
     res.json(uploadFilePath);
   } catch (err) {
     res.status(400).json(err);
@@ -16,8 +21,9 @@ const cargarArchivo = async (req, res = response) => {
 };
 
 const updateFile = async (req, res = response) => {
-  const { id, coleccion: collection } = req.params;
+  const { id, coleccion: collection, enviroment } = req.params;
   let model;
+
   //get record by id
   try {
     model = await getRecordByIdFromSomeCollection(collection, id);
@@ -27,12 +33,7 @@ const updateFile = async (req, res = response) => {
 
   //clean previous file
   try {
-    if (model.img) {
-      const imgPath = path.join(__dirname, "../uploads", collection, model.img);
-      if (fs.existsSync(imgPath)) {
-        fs.unlinkSync(imgPath); //unlinkSync delete img from folder
-      }
-    }
+    cleanPreviousFile(model, enviroment);
   } catch (err) {
     return res
       .status(500)
@@ -41,12 +42,11 @@ const updateFile = async (req, res = response) => {
 
   //upload file
   try {
-    const nombre = await uploadFile(req.files, undefined, collection);
-    model.img = nombre;
+    model = await uploadFileToLocalOrProduction(req.files, model, enviroment);
     await model.save();
     res.json(model);
   } catch (err) {
-    res.status(400).json(err);
+    res.status(400).json(err.message);
   }
 };
 
