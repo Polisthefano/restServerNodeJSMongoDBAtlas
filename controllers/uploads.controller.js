@@ -51,7 +51,7 @@ const updateFile = async (req, res = response) => {
 };
 
 const getFileFromCollecion = async (req, res = response) => {
-  const { id, coleccion: collection } = req.params;
+  const { id, coleccion: collection, enviroment } = req.params;
   let model;
   //get record by id
   try {
@@ -60,20 +60,30 @@ const getFileFromCollecion = async (req, res = response) => {
     return res.status(400).json(err.message);
   }
 
-  //rebuild path and send image
   try {
     let existsFile = false;
     const noImgPath = path.join(__dirname, "../shared/assets", "no-image.jpg");
     let imgPath = "";
-    if (model.img) {
-      imgPath = path.join(__dirname, "../uploads", collection, model.img);
-      if (fs.existsSync(imgPath)) {
-        existsFile = true;
+    if (enviroment === "LOCAL") {
+      //rebuild path and send image
+      if (model.imgLocal) {
+        imgPath = path.join(
+          __dirname,
+          "../uploads",
+          collection,
+          model.imgLocal
+        );
+        if (fs.existsSync(imgPath)) {
+          return res.status(200).sendFile(imgPath); //allow sendFiles via response. This allow in frontend send request to this endpoint and in src path into <img> put the result
+        }
+      }
+    } else {
+      if (model.imgCloud) {
+        imgPath = model.imgCloud;
+        return res.status(200).redirect(imgPath); //allow sendFiles via response. This allow in frontend send request to this endpoint and in src path into <img> put the result
       }
     }
-    if (existsFile) {
-      return res.status(200).sendFile(imgPath); //allow sendFiles via response. This allow in frontend send request to this endpoint and in src path into <img> put the result
-    } else {
+    if (!existsFile) {
       return res.status(200).sendFile(noImgPath); //allow sendFiles via response. This allow in frontend send request to this endpoint and in src path into <img> put the result
     }
   } catch (err) {
