@@ -80,7 +80,7 @@ const getFileFromCollecion = async (req, res = response) => {
     } else {
       if (model.imgCloud) {
         imgPath = model.imgCloud;
-        return res.status(200).redirect(imgPath); //allow sendFiles via response. This allow in frontend send request to this endpoint and in src path into <img> put the result
+        return res.status(200).redirect(imgPath); //redirect from web service
       }
     }
     if (!existsFile) {
